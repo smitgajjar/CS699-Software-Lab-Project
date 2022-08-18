@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!--Show content only if user is authenticated-->
+{% if user.is_authenticated %}
+<!-- Home Page profile card begins here -->
+<div class = "container">
+	<div class="card mx-auto" style="width: 18rem; margin-top:150px;" >
+		<img src="{% static 'icons/logo.png' %}" class="card-img-top" alt="..." style="height: 200px; padding: 10px; ">
+		<div class="card-body">
+			 <!--Show current logged in users first and last name-->
+			<h5 class="card-title" >{{user.first_name}} {{user.last_name}}</h5>
+				{% if user.is_student %} <!-- If current user is student-->
+				<p class="card-text">Roll Number: {{user.username}}
+				<p class="card-text">User type : Student<br>
+				Courses Taken : </p> <!-- Display courses mapped to current user-->
+				{% if courses %}
+					<ul>
+						{% for course in courses %}
+	                	<li>{{ course }}</li>
+	                	{% endfor %}
+					</ul>
+					{% else %} 
+						<p> No courses taken! </p>
+					{% endif %}    
+				<a href="{% url 'deadline' %}" class="btn btn-dark">Deadlines</a>
+				<a href="{% url 'notes' %}" class="btn btn-dark">Notes</a>
+				
+				{% else %} <!-- If current user is teacher -->
+				<p class="card-text">User ID: {{user.username}}
+				<p class="card-text">User type: Teacher<br>
+				Courses : </p> <!-- Display courses mapped to current user-->
+					{% if courses %}
+					<ul>
+						{% for course in courses %}
+	                	<li>{{ course }}</li>
+	                	{% endfor %}
+					</ul>
+					{% else %}
+						<p> No courses taken! </p>
+					{% endif %}
+				<a href="{% url 'deadline' %}" class="btn btn-dark">Deadlines</a>
+				{% endif %}    
+
+			</div>
+		</div>
+	</div>
+<!-- Home Page profile card ends here -->
+	
+	{% else %}
+<!-- If user is not authenticated-->
+	{% endif %}
+	{% endblock %}

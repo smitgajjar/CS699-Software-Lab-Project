@@ -1,0 +1,36 @@
+/* CSS for drowdown of deadline and notes*/
+.dropdown-wrapper {
+	padding: 10px 10px 10px 10px;
+	margin: 10px 40px 10px 40px;
+	display: flex;
+	justify-content: center;
+	background: black;
+	color: white;
+	border-radius: 20px;
+	box-shadow: 5px 16px 9px grey;
+}
+/* CSS for header of table*/
+.table__header {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+/* CSS for table */
+.table-wrapper{
+	padding: 0px 0px 0px 0px;
+	margin: 40px 40px 20px 40px;
+	display: flex;
+	justify-content: center;
+}
+/* CSS for delete button*/
+.delete-btn{
+	margin: 10px 40px 10px 40px;
+}
+/* CSS for add button*/
+.add-btn{
+	margin: 10px 40px 10px 40px;
+}
+/* CSS for share button*/
+.share-btn{
+	margin: 10px 20px 10px 40px;	
+}

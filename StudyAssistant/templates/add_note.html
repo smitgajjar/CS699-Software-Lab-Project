@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="container" >
+		<div style="display:flex; justify-content:center;">
+			<h1>Add Notes</h1>
+		</div>
+        <!--Form for adding note begins here-->
+		<form class="form-group" method="POST" action="put_note">
+			{% csrf_token %}
+            <!--Dropdown for selecting course-->
+			<div class="dropdown-wrapper">
+				<span style="font-size: 20px;">Select Course:</span>
+				<select name="dropdown" style="margin-left: 10px;">
+					{% for course in courses %}
+					<option value="{{course}}">{{course}}</option>
+					{% endfor %}
+				</select>
+			</div>
+            <!--Dropdown ends here-->
+			<br>
+			<br>
+			<div style="padding-left: 40px; padding-right: 40px;">
+				<div class="card text-dark bg-light mb-1" >
+					<div class="card-body">
+                        <!--Note Title written here-->
+						<div class = "form-group">
+							<label for="note_title" ><b>Title:</b></label>
+							<input name="Title" type="text" class="form-control" id="note_title"><br>
+						</div>
+						<br>
+						<h5 class="card-title">Write a note</h5>
+                        <!--Note content written here-->
+						<div class="form-group">
+							<textarea id="addNote" name="Content" class="form-control" aria-label="With textarea"></textarea>
+						</div>
+						<br />
+                        <!--Button for submitting added note-->
+						<button id="addBtn" class="btn btn-primary">Add</button>
+                        <!--Button ends here -->
+
+					</div>
+				</div>
+			</div>
+			<br>
+		</form>
+        <!--Form for adding note ends here-->
+    </div>
+		
+{% endblock %}

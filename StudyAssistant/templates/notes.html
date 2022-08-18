@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container">
+
+	<!-- Dropdown wrapper BEGINS -->
+	<div class="dropdown-wrapper">
+		<span style="font-size: 20px;">Select Course:</span>
+
+		<!-- Course selection form BEGINS -->
+		<form action="notes" method="POST">
+			{% csrf_token %}
+			<select name="dropdown" style="margin-left: 10px;">
+				<option value="all" selected="selected">All Courses</option>
+				{% for course in courses %}
+				<option value="{{course}}">{{course}}</option>
+				{% endfor %}
+				<input type="submit" class ="btn-danger" style="margin-left: 10px;" value="Select">
+			</select>
+		</form>
+		<!-- Course selection form ENDS -->
+
+	</div>
+	<!-- Dropdown wrapper ENDS -->
+
+	<form id="form1" method="POST" action="delete_note">
+		{% csrf_token %}
+	</form>
+	
+	<!-- Table wrapper BEGINS -->
+	<div class="table-wrapper">
+		<table id="tbl" class="table table-striped">
+			<thead class="thead-dark">
+
+				<tr>
+					<th></th> <!--For checkboxes-->
+					<!--Course name-->
+					<th><button type="button" class="table__header">Course Name</button></th> 
+					<!--Title of note-->
+					<th><button type="button" class="table__header">Title</button></th> 
+					<!--For button-->
+					<th><button type="button" class="table__header"></button></th> 
+
+				</tr>
+			</thead>
+			<tbody>
+				{%if notes %}
+				
+				{% for note in notes %}
+				
+				<tr>
+					<!--Checkbox form-->
+					<td style="padding-top: 23px;"><input form="form1" type="checkbox" value="{{note.id}}" name="selected_row" onclick="getRow(this)"></td>
+					<!--Display course and title-->
+					<td style="padding-top: 23px;">{{note.course}}</td> 
+					<td style="padding-top: 23px;">{{note.Title}}</td>
+
+					<td>
+						<!--Form for sending information when view is clicked-->
+						<form method="POST" action="view_note">
+							{% csrf_token %}
+							<input name="current_row" type="hidden" value="{{note.id}}">
+							<button class="btn btn-success delete-btn" type="submit">View</button>
+						</form>
+					</td>
+
+				</tr>
+				{% endfor %}
+				{% else %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+	<!-- Table wrapper ENDS -->
+
+	<!-- Delete button BEGINS -->
+	<button class="btn btn-success delete-btn" form="form1" type="submit"> Delete </button><br>
+	<!-- Delete button ENDS -->
+	
+	<!-- Add Deadline button BEGINS -->
+	<a href="{% url 'add_note' %}">
+		<span class="btn btn-primary add-btn" > Add Notes </span>
+	</a>
+	<!-- Add Deadline button ENDS -->
+
+</div>
+
+<!-- Javascript code BEGINS -->
+<script>
+	// Sorting by column header
+	// Reference: https://github.com/1milligram/html-dom/blob/master/public/demo/sort-a-table-by-clicking-its-headers/index.html
+	document.addEventListener('DOMContentLoaded', function () {
+		const table = document.getElementById('tbl');
+		const headers = table.querySelectorAll('th');
+		const tableBody = table.querySelector('tbody');
+		const rows = tableBody.querySelectorAll('tr');
+
+		// Track sort directions
+		const directions = Array.from(headers).map(function (header) {
+			return '';
+		});
+
+		// Transform the content of given cell in given column
+		const transform = function (index, content) {
+			// Get the data type of column
+			const type = headers[index].getAttribute('data-type');
+			switch (type) {
+				case 'number':
+				return parseFloat(content);
+				case 'string':
+				default:
+				return content;
+			}
+		};
+
+		const sortColumn = function (index) {
+			// Get the current direction
+			const direction = directions[index] || 'asc';
+
+			// A factor based on the direction
+			const multiplier = direction === 'asc' ? 1 : -1;
+
+			const newRows = Array.from(rows);
+
+			newRows.sort(function (rowA, rowB) {
+				const cellA = rowA.querySelectorAll('td')[index].innerHTML;
+				const cellB = rowB.querySelectorAll('td')[index].innerHTML;
+
+				const a = transform(index, cellA);
+				const b = transform(index, cellB);
+
+				switch (true) {
+					case a > b:
+					return 1 * multiplier;
+					case a < b:
+					return -1 * multiplier;
+					case a === b:
+					return 0;
+				}
+			});
+
+			// Remove old rows
+			[].forEach.call(rows, function (row) {
+				tableBody.removeChild(row);
+			});
+
+			// Reverse the direction
+			directions[index] = direction === 'asc' ? 'desc' : 'asc';
+
+			// Append new row
+			newRows.forEach(function (newRow) {
+				tableBody.appendChild(newRow);
+			});
+		};
+
+		[].forEach.call(headers, function (header, index) {
+			header.addEventListener('click', function () {
+				sortColumn(index);
+			});
+		});
+	});
+	
+	// Function for checking which checkboxes are selected
+	// Used for testing purpose
+	let selected=new Map();
+	function getRow(n) {
+		let row = n.parentNode.parentNode;
+		let cols = row.getElementsByTagName("td");
+		let course_name = cols[1].childNodes[0].nodeValue;
+		let event_name = cols[2].childNodes[0].nodeValue;
+		
+		if(selected.has(course_name+" "+event_name)) {
+			selected.delete(course_name+" "+event_name);
+		}
+		else{
+			selected.set(course_name+" "+event_name, true);
+		}
+		console.log("----")
+		for(const course_event of selected.keys()){
+			console.log(course_event);
+		}
+	}
+</script>
+<!-- Javascript code ENDS -->
+
+{% else %}
+{% endif %}
+{% endblock %}

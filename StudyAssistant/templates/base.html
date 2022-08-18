@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{% static 'css/deadline.css' %}">
+
+	<title>Study Assistant</title>
+</head>
+<body>
+	
+	{% if user.is_authenticated %}
+
+	<!-- Nav Bar for authenticated user BEGINS -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 sticky-top">
+		<div class="container-fluid">
+			<a class="navbar-brand me-5" href="{% url 'home' %}">
+				<img src="{% static 'icons/deadline.png' %}" height="45px"> Study Assistant
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav  me-auto mb-2 mb-lg-1">
+					<li class="nav-item me-2">
+						<a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+					</li>
+					<!--Notes navigation button -->
+					<li class="nav-item me-2">
+						<a class="nav-link active " href="{% url 'deadline' %}">Deadlines</a>
+					</li>
+					<!--Notes navigation button (visible to only student user)-->
+					{% if user.is_student %}
+					<li class="nav-item me-2">
+						<a class="nav-link active " href="{% url 'notes' %}">Notes</a>
+					</li>  
+					{% endif %} 
+				</ul>
+				<!-- Logout  -->
+				<ul class="navbar-nav ml-auto"> 
+					<li class="nav-item me-3">
+						<a class="nav-link active " href="{% url 'logout' %}">Logout</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- Nav Bar for authenticated user ENDS -->
+
+	{% else %}
+
+	<!-- Nav Bar for unauthenticated user BEGINS -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand me-5" href="{% url 'home' %}">
+				<img src="{% static 'icons/deadline.png' %}" height="45px"> Study Assistant
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav  me-auto mb-2 mb-lg-1">
+					<li class="nav-item me-2">
+						<a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+					</li>
+					  
+				</ul>
+				<ul class="navbar-nav ml-auto"> 
+					<li class="nav-item me-3">
+						<a class="nav-link active " href="{% url 'login' %}">Login</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- Nav Bar for unauthenticated user ENDS -->
+
+	<!-- Card displaying "Please Login" BEGINS -->
+	<div class="card mx-auto" style="width: 18rem; margin-top:150px; text-align:center;" >
+		<img src="{% static 'icons/logo.png' %}" class="card-img-top" alt="..." style="height: 200px; padding: 10px; ">
+		<div class="card-body" >
+			<h5 class="card-title mt-2">Please Login</h5>
+			
+				
+				<a href="{% url 'login' %}" class="btn btn-dark mt-2">Login</a>
+			 
+
+			</div>
+		</div>
+	</div>
+	<!-- Card displaying "Please Login" ENDS -->
+
+	{% endif %}
+
+	{% block content %}
+
+	<!-- Content block for any child page HERE-->
+
+	{% endblock %}
+
+</div>
+
+
+</body>
+</html>

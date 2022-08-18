@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!--Container for displaying title and content of note-->
+	<div class="container" >	
+		<div style="margin-top: 10%; padding-left: 40px; padding-right: 40px;">
+			<div class="card text-dark bg-light mb-1" >
+				<div class="card-body">
+					<form class="form-group" method="POST" action="put_note">
+						{% csrf_token %}
+                        <!--Title begins here-->
+						<div class = "form-group">
+							<label for="note_title" ><b>Title:</b></label>
+							<input type="text" name="Title" value="{{viewed_title}}" class="form-control" id="note_title"><br>
+							<input type="hidden" name="id" value="{{viewed_id}}">
+						</div>
+                        <!--Title ends here-->
+						<br>
+                        <!--Content begins here-->
+						<h5 class="card-title">Note : </h5>
+						<div class="form-group">
+							<textarea name="Content" id="addNote" class="form-control" aria-label="With textarea">{{viewed_content}}</textarea>
+						</div>
+                        <!--Content endss here-->
+						<br>
+						<input type="hidden" name="course" value="{{viewed_course}}" />
+                        <!--Save button for saving changes made to content-->
+						<button id="addBtn" class="btn btn-primary">Save</button>
+	                    
+                	</form>
+				</div>
+			</div>
+		</div>
+		<br>
+    </div>
+    <!--Container ends here-->
+		
+{% endblock %}
